@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>elevator-simulator</artifactId>
+		<groupId>com.elevator.simulator</groupId>
+		<version>demo</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>elevator-simulator-web</artifactId>
+
+	<properties>
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+		<packname>-${project.version}-${maven.build.timestamp}</packname>
+		<jackson.databind-version>2.2.3</jackson.databind-version>
+	</properties>
+	<packaging>war</packaging>
+	<name>Elevator Simulator Web</name>
+	<description>Front end tier for elevator simulator</description>
+	<licenses>
+		<license>
+			<name>Apache License</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<repositories>
+	</repositories>
+	<pluginRepositories>
+	</pluginRepositories>
+	
+	<dependencies>
+	
+	     <dependency>
+			<groupId>com.elevator.simulator</groupId>
+			<artifactId>elevator-simulator-server</artifactId>
+			<version>demo</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		 <dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.mail</groupId>
+						<artifactId>mail</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.jms</groupId>
+						<artifactId>jms</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.sun.jdmk</groupId>
+						<artifactId>jmxtools</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.sun.jmx</groupId>
+						<artifactId>jmxri</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+		
+        
+	
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		 	<groupId>jstl</groupId>
+		 	<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		
+		<!-- Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.databind-version}</version>
+		</dependency>
+
+        <!--  spring  -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		
+		<!-- Spring WebSocket dependencies -->
+	    <dependency>
+	      <groupId>org.springframework</groupId>
+	      <artifactId>spring-websocket</artifactId>
+	      <version>${org.springframework.version}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.springframework</groupId>
+	      <artifactId>spring-messaging</artifactId>
+	      <version>${org.springframework.version}</version>
+	    </dependency>
+	    
+	    <!-- Spring security dependencies  -->
+		    <dependency>
+		      <groupId>org.springframework.security</groupId>
+		      <artifactId>spring-security-web</artifactId>
+		       <version>4.0.2.RELEASE</version>
+		    </dependency>
+		    <dependency>
+		      <groupId>org.springframework.security</groupId>
+		      <artifactId>spring-security-config</artifactId>
+		       <version>4.0.2.RELEASE</version>
+		    </dependency>
+		
+
+		<!-- it sub dependencies was importing spring-expression 4.0.7 which was 
+			being initialized with method not defined where is the backward compatibility 
+			for spring  
+	    -->
+	   <dependency> 
+	    <groupId>org.springframework.data</groupId> 
+	    <artifactId>spring-data-rest-webmvc</artifactId> 
+		<version>2.2.1.RELEASE</version> 
+		<exclusions> 
+		  <exclusion> 
+		    <groupId>org.springframework</groupId> 
+		    <artifactId>spring-webmvc</artifactId> 
+		  </exclusion> 
+		 <exclusion> 
+		   <groupId>org.springframework</groupId> 
+		   <artifactId>spring-expression</artifactId> 
+		 </exclusion>
+		  
+		  <exclusion>
+		   <groupId>com.fasterxml.jackson.core</groupId>
+		   <artifactId>jackson-core</artifactId>
+		  </exclusion>
+		 
+		  <exclusion> 
+		    <groupId>com.fasterxml.jackson.core</groupId>
+	         <artifactId>jackson-databind</artifactId>
+		  </exclusion> 
+		  
+		   <exclusion> 
+		    <groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		  </exclusion> 
+	    </exclusions> 
+		</dependency>
+		
+		
+		<dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-core</artifactId>
+		  <version>2.4.4</version>
+		</dependency>
+		
+		<dependency>
+		 <groupId>com.fasterxml.jackson.core</groupId>
+		 <artifactId>jackson-annotations</artifactId>
+		 <version>2.4.4</version>
+		</dependency>
+		
+		<dependency>
+		 <groupId>com.fasterxml.jackson.core</groupId>
+		 <artifactId>jackson-databind</artifactId>
+		 <version>2.4.4</version>
+		</dependency>
+
+	</dependencies>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<!-- Jetty plugin for development environment -->
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.3.4.RC0</version>
+				<configuration>
+					<scanIntervalSeconds>1</scanIntervalSeconds>
+					<webApp>
+					    <extraClasspath>${project.build.directory}/classes/</extraClasspath>
+						<contextPath>/elevator-simulator</contextPath>
+					</webApp>
+				</configuration>
+			</plugin>
+					
+			<!-- Build war -->
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<version>2.1.1</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>

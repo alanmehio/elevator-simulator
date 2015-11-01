@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/jms 
+http://www.springframework.org/schema/jms/spring-jms.xsd">
+
+ 
+    <!-- enabling annotation driven configuration /-->
+    <context:annotation-config />
+    
+   
+    <!-- ***********-->
+	<!-- JMS start -->
+	<!-- ***********-->
+	<!-- Create a local broker -->
+	<bean id="bridgedBroker" class="org.apache.activemq.broker.BrokerService"
+		init-method="start" destroy-method="stop" >
+		<property name="brokerName" value="bridgedBroker" />
+		<property name="persistent" value="true" />
+		<property name="useJmx"     value="false" />
+		<property name="transportConnectorURIs">
+			<value>vm://localhost:7001</value>
+		</property>
+		<property name="jmsBridgeConnectors">
+			<bean class="org.apache.activemq.network.jms.JmsQueueConnector">
+				<property name="outboundQueueConnectionFactory">
+					<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+						<property name="brokerURL"> <!-- if client fail to connect loadbalance -->
+						<value>failover://(vm://localhost:61616,vm://localhost:61617)?maxReconnectDelay=10</value>
+						</property>							
+					</bean>
+				</property>
+				<property name="outboundQueueBridges">
+					<list>
+						<bean class="org.apache.activemq.network.jms.OutboundQueueBridge">
+							<constructor-arg value="queue1" />
+						</bean>
+						<bean class="org.apache.activemq.network.jms.OutboundQueueBridge">
+							<constructor-arg value="queue2" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!--Create broker connection factories This one connects to the above broker: -->
+	<bean id="brokerConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+	  <property name="brokerURL">
+        <value>vm://localhost:7001</value>
+      </property>
+	</bean>
+
+
+	<!-- Then wrap it with a CachingConnectionFactory (almost always a good 
+		idea): -->
+	<bean id="cachingBrokerConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+	   <property name="targetConnectionFactory">
+	      <ref bean="brokerConnectionFactory" />
+	    </property>
+	    <property name="sessionCacheSize">
+	     <value>10</value>
+	    </property>
+	</bean>
+
+	<!-- Create local equivalents of the remote destinations Each destination 
+		you’ll be talking to now needs a local representation: -->
+	<bean id="queue1destination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="queue1" />
+	</bean>
+
+	<bean id="queue2destination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="queue2" />
+	</bean>
+
+	<!--  Create JMS templates to be wired into local beans I’ll just make 
+		one for queue1 here; queue2 is exactly the same process if there is more jmsTempmlate: -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+	  <property name="connectionFactory">
+	    <ref bean="cachingBrokerConnectionFactory" />
+	  </property>
+	  <property name="defaultDestination" >
+	    <ref bean="queue1destination" />
+	  </property>	  
+	</bean>
+  
+
+   <!-- *************************************************-->
+   <!-- JMS ends -->
+   <!-- **************************************************-->
+    
+      
+   <context:component-scan base-package="com.elevator.simulator.simulator" />
+    
+    
+
+</beans>
+
+

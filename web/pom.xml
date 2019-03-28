@@ -14,7 +14,7 @@
 	<properties>
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 		<packname>-${project.version}-${maven.build.timestamp}</packname>
-		<jackson.databind-version>2.9.7</jackson.databind-version>
+		<jackson.databind-version>2.9.8</jackson.databind-version>
 	</properties>
 	<packaging>war</packaging>
 	<name>Elevator Simulator Web</name>
